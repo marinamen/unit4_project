@@ -3,7 +3,7 @@
 # A Reddit Redesign : Trenditt
 
 ## [Criteria C: Development](#criteria-c-development)
-3.1.[Tools and techniques used](#techniques_used)
+3.1.[Tools and techniques used](#techniques-used)
 
 3.2. [Sources](#sources)
 
@@ -31,7 +31,7 @@ Create a Flask Web application for an online bulletin board system (like reddit)
 
 **7. [HL++] send emails**
 
-# Criteria C: Development
+# Criteria C Development
 
 ## Techniques used
 
