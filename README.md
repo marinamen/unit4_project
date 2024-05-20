@@ -2,15 +2,16 @@
 ![](https://github.com/marinamen/unit4_project/blob/main/images/Disen%CC%83o_sin_ti%CC%81tulo__1_-removebg-preview.png)
 # A Reddit Redesign : Trenditt
 
-- For our Unit 4 and final G11 CS project we were tasked with re-creating a online board system such as reddit. Solely evaluated using Criteria C, D and E using a MVP.
-- In accordance with this I chose to develop a redesign that would solely surround fashion, I got some inspiration from Pinterest *[1]*
-
-## 3. [Criteria C: Development](#criteria-c-development)
-3.1.[Tools and techniques used](#)
+## [Criteria C: Development](#criteria-c-development)
+3.1.[Tools and techniques used](#techniques_used)
 
 3.2. [Sources](#sources)
 
 3.3[Development](#development)
+
+- For our Unit 4 and final G11 CS project we were tasked with re-creating a online board system such as reddit. Solely evaluated using Criteria C, D and E using a MVP.
+- In accordance with this I chose to develop a redesign that would solely surround fashion, I got some inspiration from Pinterest *[1]*
+
 
 ## Success Criteria 
 
