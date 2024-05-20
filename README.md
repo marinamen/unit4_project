@@ -43,17 +43,20 @@ Create a Flask Web application for an online bulletin board system (like reddit)
 ## Techniques used
 
 1. Manipulating SQLite Database
-2. Variables
+2. Functions
 3. For loops
 4. If statements
-5. Functions
-6. Password Hashing
+5. Variables
+6. Encryption
 7. Nesting loops
 8. HTML template usage
-9. JWT session token usage
+9. OPENAI session token usage
 10. Cookie usage
 11. CSS web design 
 12. Using Flask library in Python
+13. Get/Post methods
+14. Cookies
+15. OOP (object oriented programming)
 
 ## Sources
 1. “Beautiful CSS Buttons Examples - CSS Scan.” 92 Beautiful CSS Buttons Examples - CSS Scan, https://getcssscan.com/css-buttons-examples. 
