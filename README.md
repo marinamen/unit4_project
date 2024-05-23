@@ -80,6 +80,7 @@ To start the a webpage there is certain things to take into account:
 ```.py
 @app.route('/login', methods=['GET', 'POST'])
 ```
+*fig.1*
 App route, so into what adress from our website this page is saved under, in this case it would be under **"website/login.httml"** and the methods allowed. Essentially what this means is that within this page of our website there will be certain usages that will require the information to be fetched, updated or saved in the database, hence `GET` in order to retrieve information, `POST` in order to save and update what is written by the user. *Important note is that the code for the website in order to be functional it needs to be saved within a function of the page's name*
 
 Within our login function:
@@ -88,6 +89,8 @@ A connection with our Database function is established following the usual proto
 ```.py
     db = DatabaseWorker('unit4.db')
 ```
+*fig.2*
+
 Following this we will now set what happens when a button is clicked within the website that needs information or verification from the database. In this case since it is a login we will use an if that is complied whenever a button that requires something to be verified with the database so it would be triggered when the `LOGIN` button is clicked after the user has inputted their information.
 
 ```.py
@@ -95,6 +98,8 @@ Following this we will now set what happens when a button is clicked within the 
         uname = request.form.get('uname')
         password = request.form.get('psw')
 ```
+*fig.3*
+
 As I mentioned before when the website requires infomation from the database it will trigger the `GET` method and this will retrieve the information inputted in the text inputs  of *uname* and *password* and save it under the two variables shown above.
 
 Next step is to verify whether the information inputted by the user matches the previous credentials. In order to do this we use our connection with the database to retrieve information with our Database Worker class. Using the function within it run_query that as the name says will run the SQL query, and in this case it will fetch the information where the username equals the one inputted and then will use index [0] for the id and [1] for the password. 
@@ -102,12 +107,16 @@ Next step is to verify whether the information inputted by the user matches the 
         user = db.run_query("SELECT id, password FROM users WHERE username = ?", (uname,))
         if user and check_password_hash(user[1], password):
 ```
+*fig.4*
+
 After this comes the most crucial part the actual verification of the user's credential, I used an if loop since it is simple and perfectly fitting for this condition. If user exists, meaning if the query retrieved any information from the database using the inputted username then it will check the password. Since the password is saved hashed, using sha256 encryption, the method i used to check was a function I had previously created called check_hash which simply dehashes the encryption and compares the result with the unhashed inputted password, returning `true[1]` or `false[0]`.
 
 ```.py
 def checkHash(text: str, hashed: str) -> bool:
     return hasher.verify(text, hashed)
 ```
+*fig.5*
+
 
 When a true is returned the code that follows runs, it indexes the first value of user which would be the id and saves it under the `user_id`  . It then redirects the page to the home page and in order for the website to be altered and saved under a user, it sets a cookie in the user's browser  with the user id. 
 ```.py
@@ -117,6 +126,8 @@ When a true is returned the code that follows runs, it indexes the first value o
     token = jwt.encode({'user_id': user_id, 'exp': datetime.utcnow() + timedelta(minutes=45)}, token_key, algorithm = 'HS256')
     session['token'] = token
 ```
+*fig.6*
+
 The first argument, `user_id`, is the name of the cookie, this is the key that will be used to retrieve the cookie's value later. The second argument, `str(user_id)`, is the value of the cookie. The user ID is converted to a string and stored in the cookie. 
 
 Next under `token` a JSON Web Token (JWT) is created to securely store the user's ID and an expiration time. The token is generated with the user's id and set to expire in 45 minutes, this token is then stored in the user's session. This allows the application to verify the user's identity and session validity on subsequent requests.
@@ -125,9 +136,21 @@ Lastly if the conditions required are not met it an error pops up.
 ```.py
   return render_template('login.html', error='Invalid username or password')
 ```
+*fig.7*
+
 
 **REGISTRATION SYSTEM**
 
 
-in Fig.14 The function takes the usernamme,city,email and a password which is then encrypted before storing everything into user database. we see that after running the query and successfully storing the infromation of the newly registered user, a user is redirected to the login page where it can access the website using credentials of the newly registered account. When developing this part of code using generalisation I was able to recognize a way to solve one of the criteria requirements by including a option bar in the registration where a user would input the city which he would write about. This helped with solving the problem of seeing irellevent content creators that are not located in my city.
 
+```.py
+                else:
+                    db.run_query("INSERT into users(username, email, password) values('{username}', '{email}', '{encrypt(password)}'")
+                    flash(('Registration completed, please log in.', 'success'))
+
+                    return redirect(url_for('login'))
+
+```
+*fig.8*
+
+As shown in fig.8 the additional feature that the register function has, after multiple verifications of whether the inputted information by the user meets requirements such as email having `@` or password confimation, the information is inputted into he database via the method `POST` from the register button in the website, by the SQL query shown above an
