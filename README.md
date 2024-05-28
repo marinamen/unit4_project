@@ -130,7 +130,11 @@ When a true is returned the code that follows runs, it indexes the first value o
 
 The first argument, `user_id`, is the name of the cookie, this is the key that will be used to retrieve the cookie's value later. The second argument, `str(user_id)`, is the value of the cookie. The user ID is converted to a string and stored in the cookie. 
 
-Next under `token` a JSON Web Token (JWT) is created to securely store the user's ID and an expiration time. The token is generated with the user's id and set to expire in 45 minutes, this token is then stored in the user's session. This allows the application to verify the user's identity and session validity on subsequent requests.
+Next under `token` a JSON Web Token (JWT) is created to securely store the user's ID and an expiration time. The token is generated with the user's id and set to expire in 45 minutes, this token is then stored in the user's session. This allows the application to verify the user's identity and session validity on subsequent requests.This important implementation was inspired by using computational thinking and decomposing the problem of webiste's safety into various parts, the encrypting and the JWT. Otherwise even after implementing cookies, the user could still redirect to a page without signing in beforehand, this is why I generalized the algorithm for creating JWT session tokens 11 which in turn allowed me to set a requirement that a user is logged in before accessing any features of the website. This improved security of the website and solved the previously decomposed problem of safety that the website had.
+Its true that I couldve implemented a boolean variable that verified the user was logged in but this would require many more lines of code and so I used decomposition and code optimisation in order to find the most efficient and viable safety for the website.
+
+
+
 
 Lastly if the conditions required are not met it an error pops up.
 ```.py
@@ -144,13 +148,56 @@ Lastly if the conditions required are not met it an error pops up.
 
 
 ```.py
-                else:
-                    db.run_query("INSERT into users(username, email, password) values('{username}', '{email}', '{encrypt(password)}'")
-                    flash(('Registration completed, please log in.', 'success'))
+    if len(username)>0  and len(email)>0 and len(password)>0:
+        if len(password) < 8:
+            flash(('Password must be at least 8 characters.', 'danger'))
+    else:
+        if '@' not in email:
+            flash(("Invalid email address", 'danger'))
+        else:
+            db.run_query(f"INSERT into users (username, email, password,city) values('{username}', '{email}', '{encrypt(password)}','{city}')")
+            flash(('Registration completed. Please log in.', 'success'))
+            db.close()
 
-                    return redirect(url_for('login'))
+            return redirect(url_for('login'))
 
 ```
 *fig.8*
 
-As shown in fig.8 the additional feature that the register function has, after multiple verifications of whether the inputted information by the user meets requirements such as email having `@` or password confimation, the information is inputted into he database via the method `POST` from the register button in the website, by the SQL query shown above an
+As shown in fig.8 the additional feature that the register function has, after multiple verifications of whether the inputted information by the user meets requirements such as email having `@` or password confimation, the information is inputted into he database via the method `POST` from the register button in the website, by the SQL query shown above. Although the amount of if loops here is quite inefficient I wanted to be able to have many requirements and so I decomposed it into smaller bits and the safest and least time demanding technique was to just put conditions using if and else techniques. I used the flash message in html which allows you to display messages on the top of the website to your program requirements, in this case when I was decomposing the algorithm I found that the best way to alert the user to change was via these.
+
+
+## SUCCESS CRITERIA 2 : A posting system to EDIT/CREATE/DELETE comments.
+
+
+## SUCCESS CRITERIA 3 : A system to add/remove likes.
+
+
+## SUCCESS CRITERIA 4 : A system to follow/unfollow users, follow/unfollow topics or groups.
+## SUCCESS CRITERIA 5 : A profile page with relevant information.
+## SUCCESS CRITERIA 6 : [HLs] upload images.
+## SUCCESS CRITERIA 7 : [HL++] send emails.
+## SUCCESS CRITERIA 8 : Trenditt will have a feature to display all users, emails and relevant information including no of posts and followers.
+
+Since Trenditt is a social network that is still growing, I wanted to implement a feature for all current users to be able to access other user's information and see their amount of posts and followers. In order to develop this I had to use computational thinking and abstract all the non relevant information here which is the other feauture of the emails and the profile page. By using abstraction I developed the below:
+
+```.py
+@app.route('/users', methods=['GET', 'POST'])
+def users():
+    if request.cookies.get('user_id'): # Checks if the user is authenticated by checking if the user.id cookie exists
+        db = DatabaseWorker(
+            "unit4.db")  # Creates a database worker object to perform SQL queries on the "unit4.db" database
+        full_users = db.search("SELECT * FROM users")  # Selects all users from the "users" table # selects username email adress and the city of the user
+        db.close()  # Closes the database connection
+    return render_template('users.html')
+
+```
+*fig.?*
+
+Fig.? hows the function used to showcase the list of all trenditt users, it uses an algorithm that checks if the user has a valid cookie and then it shows the list of users extracted from the user database, although not shown here, for obvious reasons in the html code showing information such as the hashed password is omitted and only the relevant user information is displayed. So the table is formatted with username, email, city, followers, posts. 
+
+
+
+
+
+
