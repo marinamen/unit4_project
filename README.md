@@ -68,6 +68,9 @@ Create a Flask Web application for an online bulletin board system (like reddit)
 3. “Cirrus CSS.” Cirrus, https://www.cirrus-ui.com/buttons/basics. 
 4. Auth0. “JSON Web Tokens.” Auth0 Docs, https://auth0.com/docs/secure/tokens/json-web-tokens. 
 5. “How to - Search Bar.” How To Create a Search Bar, https://www.w3schools.com/howto/howto_css_searchbar.asp.
+6. “GPU Programming: When, Why and How? — GPU Programming: Why, When and How? Documentation.” Enccs.github.io, enccs.github.io/gpu-programming/.
+7. “Introduction to Numba: CUDA Programming.” Nyu-Cds.github.io, nyu-cds.github.io/python-numba/05-cuda/. Accessed 29 May 2024.
+8. “Beginner’s Guide to GPU Accelerated Graph Analytics in Python.” NVIDIA Technical Blog, 24 Mar. 2021, developer.nvidia.com/blog/beginners-guide-to-gpu-accelerated-graph-analytics-in-python/.
 
 
 ## SUCCESS CRITERIA 1 : An encrypted login/registration system.
@@ -102,7 +105,9 @@ Following this we will now set what happens when a button is clicked within the 
 
 As I mentioned before when the website requires infomation from the database it will trigger the `GET` method and this will retrieve the information inputted in the text inputs  of *uname* and *password* and save it under the two variables shown above.
 
-Next step is to verify whether the information inputted by the user matches the previous credentials. In order to do this we use our connection with the database to retrieve information with our Database Worker class. Using the function within it run_query that as the name says will run the SQL query, and in this case it will fetch the information where the username equals the one inputted and then will use index [0] for the id and [1] for the password. 
+Next step is to verify whether the information inputted by the user matches the previous credentials. In order to do this we use our connection with the database to retrieve information with our Database Worker class. Using the function within it run_query that as the name says will run the SQL query, and in this case it will fetch the information where the username equals the one inputted and then will use index [0] for the id and [1] for the password. A problem I encountered was that I wanted to prevent my databases from sql injections, Using algorithmic thinking I used parameterized queries that ensures that user input is treated as data rather than executable code, it maintains the integrity and security of the SQL queries.
+
+
 ```.py
         user = db.run_query("SELECT id, password FROM users WHERE username = ?", (uname,))
         if user and check_password_hash(user[1], password):
@@ -170,6 +175,7 @@ As shown in fig.8 the additional feature that the register function has, after m
 ## SUCCESS CRITERIA 2 : A posting system to EDIT/CREATE/DELETE comments.
 
 
+
 ## SUCCESS CRITERIA 3 : A system to add/remove likes.
 
 
@@ -196,8 +202,35 @@ def users():
 
 Fig.? hows the function used to showcase the list of all trenditt users, it uses an algorithm that checks if the user has a valid cookie and then it shows the list of users extracted from the user database, although not shown here, for obvious reasons in the html code showing information such as the hashed password is omitted and only the relevant user information is displayed. So the table is formatted with username, email, city, followers, posts. 
 
+## Additional Further Options: Analysing Trends with Numba ( which incorporates GPU programming)
+
+An important addition that could be added if Trenditt were expanded into a larger social network and would want to potentially become more personalized would be Analysing Trends by using Graphic Proccessing Unit programming. Imagine you are running a social media platform where you need to analyze engagement metrics from posts to determine trending topics. Each metric (likes, shares, comments) is assigned a score, and you need to process millions of these metrics quickly to update the trending topics in real-time.
+By using GPU acceleration it would be able to:
+
+*- Process large datasets much faster than using CPU alone.*
+
+*- Provide real-time analytics and insights to users.*
+
+*- Upgrade performance and responsiveness of Social Network.*
+
+---------------------------------------------------------------------------------------------------------------------
+
+I decided to give it a sample try, but before the process is described I would like to mention limitations:
+
+---------------------------------------------------------------------------------------------------------------------
 
 
+**➼ Simplistic computation only multiplies values, lacking real-world complexity.** `(my example only uses multiplication versus real word would use machine learning algorithms)`
 
+**➼ No handling of data transfer overhead between CPU and GPU.** `(data pre proccessing not included, since my data is only integers)`
 
+**➼ Limited error handling and debugging capabilities.** `(my code does not allow for any GPU memory allocation failures, invalid inputs, or kernel execution error)`
+
+**➼ Does not account for diverse data types and structures.**`(only generating integers artifically, my values are generated randomly but usually they would be retrieved from databases)`
+
+**➼ Lacks integration with other analytical and data processing tools.** `(the integration with my flask app is minimal, but if there was high traffic a seamless integration would be needed)`
+
+---------------------------------------------------------------------------------------------------------------------
+
+To start off I followed various tutorials **[^6] [^7] [^8]**  that are cited in [Sources](#sources) 
 
