@@ -1,1 +1,215 @@
 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Welcome to Trenditt</title>
+    <style>
+        body {
+            background-color: white;
+            font-family: Helvetica, sans-serif;
+            font-size: 17px;
+            margin: 0;
+            padding: 0;
+        }
+        .center-content {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            padding-top: 20px;
+        }
+        .search-bar {
+            width: 80%;
+            max-width: 600px;
+            margin: 20px auto;
+            display: flex;
+            justify-content: center;
+        }
+        .search-bar input {
+            width: 100%;
+            padding: 10px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        .feed-container {
+            display: flex;
+            justify-content: center;
+            margin: 0 auto;
+            width: 100%;
+            max-width: 1200px;
+        }
+        .feed {
+            width: 60%;
+            max-width: 600px;
+            margin: 0 20px;
+        }
+        .post {
+            background-color: #f9f9f9;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        .post img {
+            max-width: 100%;
+            border-radius: 5px;
+        }
+        .post-title {
+            font-size: 24px;
+            margin-top: 10px;
+            margin-bottom: 10px;
+        }
+        .post-description {
+            font-size: 16px;
+            margin-bottom: 10px;
+        }
+        .post-user {
+            font-size: 14px;
+            color: #555;
+        }
+        .user-list {
+            width: 150px;
+            background-color: #f9f9f9;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 20px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        .user-list h2 {
+            font-size: 20px;
+            margin-bottom: 10px;
+        }
+        .user-list ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        .user-list li {
+            font-size: 16px;
+            margin-bottom: 10px;
+        }
+        .top-right {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+        }
+         .login-button {
+            background-color: #f9bfcd;
+            color: #FFFFFF;
+            border: none;
+            border-radius: 25px; /* Making the button round */
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.2s ease-in-out;
+        }
+
+        .login-button:hover {
+            background-color: #dba9b5;
+        }
+        .nav-bar {
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 200px; /* Adjust width as necessary */
+            height: 100%; /* Full height */
+            background-image: url('/static/nav_bar.png');
+            background-size: cover;
+            background-repeat: no-repeat;
+        }
+        .tags-container {
+            position: fixed;
+            left: 10px;
+            top: 30%;
+        }
+        .tag-button {
+            display: block;
+            width: 140px;
+            height: 25px; /* Adjust height as necessary */
+            background-color: transparent;
+            border: none;
+            cursor: pointer;
+            margin-bottom: 15px; /* Adds separation between buttons */
+        }
+
+
+    </style>
+    <script>
+        function redirectToLoginOrRegister() {
+            setTimeout(function() {
+                window.location.href = "/register"; // Change this URL to the appropriate login or register page
+            }, 10000); // 10,000 milliseconds = 10 seconds
+        }
+    </script>
+</head>
+<body onload="redirectToLoginOrRegister()">
+
+    <div class="nav-bar"></div>
+    <div class="top-right">
+        <button class="login-button" onclick="window.location.href='/login'">Login</button>
+    </div>
+    <div class="search-bar">
+        <input type="text" placeholder="Search...">
+    </div>
+    <div class="feed-container">
+        <div class="user-list">
+            <h2>Users</h2>
+            <ul>
+                <!-- Replace the following list items with dynamic content from your database -->
+                <li>User1</li>
+                <li>User2</li>
+                <li>User3</li>
+                <li>User4</li>
+                <!-- Add more users as needed -->
+            </ul>
+        </div>
+        <div class="feed">
+            <div class="post">
+                <img src="/static/tokyo1.jpeg" alt="Post Image">
+                <div class="post-title">t/TokyoFashion</div>
+                <div class="post-description">This is a description of the post.</div>
+                <div class="post-user">Posted by marinam</div>
+            </div>
+            <div class="post">
+                <img src="/static/mumbai2.jpg" alt="Post Image">
+                <div class="post-title">t/MumbaiFashion</div>
+                <div class="post-description">This is another description of a post.</div>
+                <div class="post-user">Posted by marinam</div>
+            </div>
+
+            <div class="post">
+                <img src="/static/mumbai1.jpeg" alt="Post Image">
+                <div class="post-title">t/MumbaiFashion</div>
+                <div class="post-description">This is another description of a post.</div>
+                <div class="post-user">Posted by marinam</div>
+            </div>
+            <div class="post">
+                <img src="/static/tokyo2.jpeg" alt="Post Image">
+                <div class="post-title">t/TokyoFashion</div>
+                <div class="post-description">This is another description of a post.</div>
+                <div class="post-user">Posted by marinam</div>
+            </div>
+        </div>
+        <div class="user-list">
+            <h2>Users</h2>
+            <ul>
+                <li>User5</li>
+                <li>User6</li>
+                <li>User7</li>
+                <li>User8</li>
+                <!-- Add more users as needed -->
+            </ul>
+        </div>
+    </div>
+    <div class="tags-container">
+        <button class="tag-button" onclick="window.location.href='/subtrenditt'"></button>
+        <button class="tag-button" onclick="window.location.href='/subtrenditt/tokyo'"></button>
+        <button class="tag-button" onclick="window.location.href='/subtrenditt/london'"></button>
+        <button class="tag-button" onclick="window.location.href='/subtrenditt/mumbai'"></button>
+    </div>
+
+
+</body>
+</html>
