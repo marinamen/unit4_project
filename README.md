@@ -318,3 +318,10 @@ num_posts = 1000000
 | the website shows artificial trends in the popular by analysing trends. | yes |  |
 |  |  |  |                                               
 
+
+## Reccomendations : Looking forward
+
+
+### 1. Chat with other users
+
+### 2. Further expansion of cities/subreddits
