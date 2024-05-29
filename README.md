@@ -63,7 +63,7 @@ Create a Flask Web application for an online bulletin board system (like reddit)
 15. OOP (object oriented programming)
 
 ## Sources
-1. “Beautiful CSS Buttons Examples - CSS Scan.” 92 Beautiful CSS Buttons Examples - CSS Scan, https://getcssscan.com/css-buttons-examples. 
+1. “Pinterest.” Pinterest, Pinterest, 2018, www.pinterest.es/.
 2. “Flask HTTP Methods, Handle GET &amp; Post Requests.” GeeksforGeeks, GeeksforGeeks, 2 Feb. 2023, https://www.geeksforgeeks.org/flask-http-methods-handle-get-post-requests/. 
 3. “Cirrus CSS.” Cirrus, https://www.cirrus-ui.com/buttons/basics. 
 4. Auth0. “JSON Web Tokens.” Auth0 Docs, https://auth0.com/docs/secure/tokens/json-web-tokens. 
