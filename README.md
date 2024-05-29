@@ -232,5 +232,89 @@ I decided to give it a sample try, but before the process is described I would l
 
 ---------------------------------------------------------------------------------------------------------------------
 
-To start off I followed various tutorials **[^6] [^7] [^8]**  that are cited in [Sources](#sources) 
+To start off I followed various tutorials **[^6] [^7] [^8]**  that are cited in [Sources](#sources). In order to develop this I used decomposition and abstraction since it is a pretty big algorithm to tackle that involves many broad elements surrounding it, I overcame those by using computational thinking.
+
+1. In order to analyse trends using the GPU, we need to have a series of data points that represent engagement metrics, such as likes, comments or follow. `Num_posts` is set to 1,000,000, simulating a large dataset, `post_data` generates an array of one million random float numbers between 0 and 1 and converts them to 32-bit floats for efficient GPU processing. The `scores` array, is initialised to zero and it will store the worked scores after GPU processing. Essentially it allows us to leverage the GPU to perform parallel computations on the dataset efficiently.
+
+```.py
+@app.route('/popular', methods = ['GET','POST'])
+def popular():
+    num_posts = 1000000   #example post data
+    post_data = np.random.rand(num_posts).astype(np.float32) #generates an array of num_posts random numbers between 0 and 1, and converts the array elements to 32-bit float data type
+    scores = np.zeros(num_posts, dtype=np.float32) #creates an array of num_posts elements, all initialized to 0, with each element being a 32-bit float
+```
+2. Next step is to transfer data from the CPU to the GPU, `cuda.to_device(post_data)`copies the `post_data` array generated previously to the GPU's memory which allows it to later be proccessed by the GPU. Similarly stored into `scored_device`, `cuda.to_devices` copies the `scores` array to the memory, are the results of the computation.  This step is needed for the parallel processing.
+   
+```.py
+    #transfers data to gpu
+    post_data_device = cuda.to_device(post_data)
+    scores_device = cuda.to_device(scores)
+```
+3. In CUDA programming it is essential to know what kernal function,threads and blocks are,
+   
+-*Kernal Function*: class of algorithm for pattern recognition.
+
+- *Threads:* the smallest unit of execution, where each thread executes a copy of the kernel function.
+  
+- *Blocks:* groups of threads that run the kernel function, blocks can run independently and simultaneously on the GPU.
+  
+As shown this section of code configures the number of threads and blocks for the GPU computation, `threads_per_block` sets the number of threads in each block to 256. 
+`blocks_per_grid` calculates the total number of blocks needed to cover all elements in `post_data`, it divides the total number of elements by the number of threads per block and uses `(threads_per_block - 1)` to make sure any remaining elements are also covered.
+
+```.py
+    # configures threads and blocks
+    threads_per_block = 256
+    blocks_per_grid = (post_data.size + (threads_per_block - 1)) // threads_per_block
+```
+
+4. Below I launched the kernel function with all of the needed variables, and this computed all the trending scores, next `scores`transfers the data from the GPU back to the CPU, it copies the scores array which is in the GPU´s memory back to the CPU's memory. The result is stored in the `scores` variable, which allows the CPU to access the results.
+
+```.py
+    #launch the kernel
+    compute_trending_scores[blocks_per_grid, threads_per_block](post_data_device, scores_device)
+
+    # Copy the results back to the CPU
+    scores = scores_device.copy_to_host()
+```
+
+5. Then it  selects the first 10 elements in the array and using my html `popular` page the values of the trending scores get displayed.
+```.py
+    #example output for the first 10 scores
+
+    scoress=scores[:10]
+    return render_template("popular.html",scoress=scoress)
+```
+
+After attempting to run this program multiple times due to the fact I had abstracted the broader element I found myself with a challenge, or possibly more of an endpoint. NVIDIA CUDA toolkit is only possibly to be downloaded in Linux and/or Windows with compatible GPU's and since I'm operating from a Macbook it is not possible to run the actual program, still it is an interesting investigation that could be taken further with more consideration. GPU programming can be a breakthrough for not only analysis of trends but also running high traffic algorithms or visuals on webs, still compatibility issues are very predominant. 
+
+When I hit the wall I decided to ask chatgpt to run a simulation instead and give me an example answer, Using `num_posts` of 1000000, it gave me the output below as an example of the `analysis_trend` function.
+
+```.py
+num_posts = 1000000
+"Trending scores computed. First 10 scores: [1.275 1.4845 1.5675 0.7485 1.1325 1.932 0.6525 1.689 1.257 1.878]"
+```
+
+
+
+
+
+
+
+
+
+
+
+# Criteria D: Functionality and Extensibility
+
+# Criteria E: Evaluation
+
+| Criteria | Met? | Feedback |
+|---|---|---|
+| the website has a login and registration system with input validations and secure storage | yes |  |
+| the website only allows for users that are logged in to access the network (for longer than 10s) using JWT | yes |  |
+| the website has a post system, that includes image, title, subtrenditt and date | yes |  |
+| the website allows for a like and comment system, which also allows to edit comment or remove like | yes |  |
+| the website includes interactive feed that only displays posts of the subtrenditts followed | yes |  |
+| the website shows artificial trends in the popular by analysing trends. | yes |  |
+|  |  |  |                                               
 
