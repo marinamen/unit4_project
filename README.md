@@ -202,7 +202,7 @@ def users():
 
 Fig.? hows the function used to showcase the list of all trenditt users, it uses an algorithm that checks if the user has a valid cookie and then it shows the list of users extracted from the user database, although not shown here, for obvious reasons in the html code showing information such as the hashed password is omitted and only the relevant user information is displayed. So the table is formatted with username, email, city, followers, posts. 
 
-## Additional Further Options: Analysing Trends with Numba ( which incorporates GPU programming)
+## Additional Further Options: Analysing Trends with Numba CUDA NVIDIA  ( which incorporates GPU programming)
 
 An important addition that could be added if Trenditt were expanded into a larger social network and would want to potentially become more personalized would be Analysing Trends by using Graphic Proccessing Unit programming. Imagine you are running a social media platform where you need to analyze engagement metrics from posts to determine trending topics. Each metric (likes, shares, comments) is assigned a score, and you need to process millions of these metrics quickly to update the trending topics in real-time.
 By using GPU acceleration it would be able to:
