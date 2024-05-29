@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Welcome to Trenditt</title>
+    <style>
+        body {
+            background-image: url('/static/homebg.png');
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            font-family: Helvetica, sans-serif;
+            font-size: 17px;
+        }
+        form {
+            max-width: 500px;
+            margin: 0 auto;
+            background-color: #FFFFFF;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+        }
+        h2 {
+            text-align: center;
+            font-weight: bold;
+            color: #292928;
+            margin-bottom: 30px;
+        }
+        label, input, select {
+            display: block;
+            width: 100%;
+            margin-bottom: 20px;
+            color: #555555;
+        }
+        input[type="text"], input[type="email"], input[type="password"], select {
+            border: none;
+            border-radius: 5px;
+            padding: 10px;
+            font-size: 16px;
+            background-color: #F6F7F9;
+            box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.1);
+        }
+        input[type="text"]:focus, input[type="email"]:focus, input[type="password"]:focus, select:focus {
+            outline: none;
+            background-color: #FFFFFF;
+            box-shadow: 0px 0px 5px rgb(121, 188, 255);
+        }
+        input[type="submit"] {
+            background-color: #79bcff;
+            color: #FFFFFF;
+            border: none;
+            border-radius: 5px;
+            padding: 15px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.2s ease-in-out;
+        }
+        input[type="submit"]:hover {
+            background-color: #429efc;
+        }
+        option {
+            color: #555555;
+        }
+        .picture-container {
+            text-align: center;
+        }
+        .resized-image {
+            width: 242px;
+            height: 137px;
+            display: inline-block;
+        }
+        .toggle-password {
+            float: right;
+            margin-right: 10px;
+            margin-top: -30px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <form method="post" action="/register">
+        <div class="picture-container">
+            <img class="resized-image" src="/static/Diseño_sin_título__1_-removebg-preview.png" alt="logo">
+        </div>
+        <h2>Create an Account</h2>
+        <div>
+            <label for="username">Username</label>
+            <input type="text" id="username" name="username" required>
+        </div>
+        <div>
+            <label for="email">Email</label>
+            <input type="email" id="email" name="email" required>
+        </div>
+        <div>
+            <label for="password">Password (min 8 char)</label>
+            <input type="password" id="password" name="password" pattern=".{8,}" required>
+            <span class="toggle-password" onclick="togglePasswordVisibility()">Show</span>
+        </div>
+        <div>
+            <label for="city">City</label>
+            <select id="city" name="city" required>
+                <option value="">---Select City for Trends---</option>
+                <option value="Mumbai">Mumbai</option>
+                <option value="Tokyo">Tokyo</option>
+                <option value="Madrid">Madrid</option>
+                <option value="London">London</option>
+            </select>
+        </div>
+        <div>
+            <input type="submit" value="Register">
+        </div>
+        <div style="text-align:center; margin-top:20px;">
+            <a href="{{ url_for('login') }}">Login</a>
+        </div>
+    </form>
+
+    <script>
+        function togglePasswordVisibility() {
+            var passwordField = document.getElementById("password");
+            var toggleButton = document.querySelector("span[onclick='togglePasswordVisibility()']");
+            if (passwordField.type === "password") {
+                passwordField.type = "text";
+                toggleButton.textContent = "Hide";
+            } else {
+                passwordField.type = "password";
+                toggleButton.textContent = "Show";
+            }
+        }
+
+    </script>
+</body>
+</html>
