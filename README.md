@@ -202,7 +202,22 @@ def users():
 
 Fig.? hows the function used to showcase the list of all trenditt users, it uses an algorithm that checks if the user has a valid cookie and then it shows the list of users extracted from the user database, although not shown here, for obvious reasons in the html code showing information such as the hashed password is omitted and only the relevant user information is displayed. So the table is formatted with username, email, city, followers, posts. 
 
-## Additional Further Options: Analysing Trends with Numba CUDA NVIDIA  ( which incorporates GPU programming)
+A cool feauture I added in the home page is that along the main post feed, there is two boxes, displaying the usernames of all of the users that are currently part of the trenditt social network. Using my skills for UI, which its goal  is to make the user's experience easy and intuitive, requiring minimum effort on the user's part to receive the maximum desired outcome.
+
+```.html
+    <div class="feed-container">
+        <div class="user-list">
+            <h2>users</h2>
+            <ul>
+                {% for j in userss %}
+                    <li>{{ j }}</li>   
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+````
+
+## Further Options: Analysing Trends with Numba CUDA NVIDIA  ( which incorporates GPU programming)
 
 An important addition that could be added if Trenditt were expanded into a larger social network and would want to potentially become more personalized would be Analysing Trends by using Graphic Proccessing Unit programming. Imagine you are running a social media platform where you need to analyze engagement metrics from posts to determine trending topics. Each metric (likes, shares, comments) is assigned a score, and you need to process millions of these metrics quickly to update the trending topics in real-time.
 By using GPU acceleration it would be able to:
@@ -325,3 +340,16 @@ num_posts = 1000000
 ### 1. Chat with other users
 
 ### 2. Further expansion of cities/subreddits
+
+# Works cited
+[^1]: Dream AI generated image (https://Project4pictureDreamAi.jpg)
+[^2]: Sengar, Ritesh. “Python vs PHP: Which Is Better for Web Development?” Hackernoon, 7 Jan. 2021, hackernoon.com/python-vs-php-which-is-better-for-web-development-cj1236mj. 
+[^3]: "Welcome to Flask." Flask Documentation, 15 Jan. 2023, flask.palletsprojects.com/en/2.1.x/. 
+[^4]: Grinberg, Miguel. Flask Web Development: Developing Web Applications with Python. 2nd ed., O'Reilly Media, Inc., 2018. 
+[^5]: “What Is a Database?” Oracle, https://www.oracle.com/database/what-is-database/. 
+[^6]: "What is SQL?" W3Schools, W3Schools, https://www.w3schools.com/sql/
+[^7]: "HTML Introduction." W3Schools, W3Schools, https://www.w3schools.com/html/html_intro.asp
+[^8]: "Flash vs. HTML5." Digital.gov, 17 Dec. 2015, https://digital.gov/resources/flash-vs-html5/.
+[^9]: "Why You Need an SEO-Friendly Website." SEO Werkz, 11 Jan. 2022, https://www.seowerkz.com/why-you-need-an-seo-friendly-website/.
+[^10]: https://www.smashingmagazine.com/2010/01/color-theory-for-designers-part-1-the-meaning-of-color/
+[^11]: 4. Auth0. “JSON Web Tokens.” Auth0 Docs, https://auth0.com/docs/secure/tokens/json-web-tokens. 
