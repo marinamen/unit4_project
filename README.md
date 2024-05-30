@@ -71,6 +71,7 @@ Create a Flask Web application for an online bulletin board system (like reddit)
 6. “GPU Programming: When, Why and How? — GPU Programming: Why, When and How? Documentation.” Enccs.github.io, enccs.github.io/gpu-programming/.
 7. “Introduction to Numba: CUDA Programming.” Nyu-Cds.github.io, nyu-cds.github.io/python-numba/05-cuda/. Accessed 29 May 2024.
 8. “Beginner’s Guide to GPU Accelerated Graph Analytics in Python.” NVIDIA Technical Blog, 24 Mar. 2021, developer.nvidia.com/blog/beginners-guide-to-gpu-accelerated-graph-analytics-in-python/.
+9. “What Is User Interface (UI)? | Indeed.com.” Indeed Career Guide, www.indeed.com/career-advice/career-development/user-interface#:~:text=The%20user%20interface%20is%20the.
 
 
 ## SUCCESS CRITERIA 1 : An encrypted login/registration system.
@@ -183,6 +184,53 @@ As shown in fig.8 the additional feature that the register function has, after m
 ## SUCCESS CRITERIA 5 : A profile page with relevant information.
 ## SUCCESS CRITERIA 6 : [HLs] upload images.
 ## SUCCESS CRITERIA 7 : [HL++] send emails.
+
+
+
+```.py
+from flask_mail import Mail, Message
+
+app.config['MAIL_SERVER'] = 'smtp.gmail.com'
+app.config['MAIL_PORT'] = 587 
+app.config['MAIL_USE_TLS'] = True
+app.config['MAIL_USERNAME'] = 'aestrivela@gmail.com'  #email
+app.config['MAIL_PASSWORD'] = 'CENSORED!'  #email password
+app.config['MAIL_DEFAULT_SENDER'] = 'aestrivela@gmail.com'  #email default sender
+mail=Mail(app)
+```
+
+
+
+
+
+```.py
+
+@app.route('/sendEmail', methods=['GET', 'POST'])
+def sendEmail():
+    if request.method == 'POST':
+        email = request.form['email']
+        subject = request.form['subject']
+        message_body = request.form['message']
+
+        #create a message object
+        msg = Message(subject, recipients=[email])
+        msg.body = message_body
+
+        try:
+    
+            mail.send(msg)
+            flash('email sent successfully!', 'success')
+        except Exception as e:
+            flash(f'failed to send email: {e}', 'error')
+
+        return redirect(url_for('sendEmail'))
+
+    return render_template('sendEmail.html')
+```
+
+
+
+
 ## SUCCESS CRITERIA 8 : Trenditt will have a feature to display all users, emails and relevant information including no of posts and followers.
 
 Since Trenditt is a social network that is still growing, I wanted to implement a feature for all current users to be able to access other user's information and see their amount of posts and followers. In order to develop this I had to use computational thinking and abstract all the non relevant information here which is the other feauture of the emails and the profile page. By using abstraction I developed the below:
@@ -202,7 +250,17 @@ def users():
 
 Fig.? hows the function used to showcase the list of all trenditt users, it uses an algorithm that checks if the user has a valid cookie and then it shows the list of users extracted from the user database, although not shown here, for obvious reasons in the html code showing information such as the hashed password is omitted and only the relevant user information is displayed. So the table is formatted with username, email, city, followers, posts. 
 
-A cool feauture I added in the home page is that along the main post feed, there is two boxes, displaying the usernames of all of the users that are currently part of the trenditt social network. Using my skills for UI, which its goal  is to make the user's experience easy and intuitive, requiring minimum effort on the user's part to receive the maximum desired outcome.
+A cool feauture I added in the home page is that along the main post feed, there is two boxes, displaying the usernames of all of the users that are currently part of the trenditt social network. Using my skills for UI, which its goal is to make the user's experience easy and intuitive, requiring minimum effort on the user's part to receive the maximum desired outcome[^9] I though about this feature, that for a growing network its a good incentive to want to interact with users in a very easy and intuitive way that doesnt require much further thought.
+
+In order to do this, I will show how I set this up using abstraction, focusing only on the specific code that performs the task described.
+
+```.py
+#within home function and after establishing database connections
+
+userss = db.run_query("select username from users ")
+
+
+```
 
 ```.html
     <div class="feed-container">
