@@ -399,21 +399,34 @@ num_posts = 1000000
 # Criteria D: Functionality and Extensibility
 
 # Criteria E: Evaluation
+                                             
+## Beta Testing 
+
+Two potential users who had some knowledge in the development process reached out to us to try our social network and they gave us the feedback below. We have removed their names so that their identities are not compromised.
+
+<img src="https://github.com/marinamen/unit4_project/blob/main/images/Disen%CC%83o%20sin%20ti%CC%81tulo%20(2).png" width=80% height=80%>
+
+*fig.30*
+
+<img src="https://github.com/marinamen/unit4_project/blob/main/images/Disen%CC%83o%20sin%20ti%CC%81tulo%20(3).png" width=70% height=70%>
+
+*fig.31*
+
+Additionally we asked them to complete the table below with their feebdack, they each adress the criteria mentioned before.
 
 | Criteria | Met? | Feedback |
 |---|---|---|
-| the website has a login and registration system with input validations and secure storage | yes |  |
-| the website only allows for users that are logged in to access the network (for longer than 10s) using JWT | yes |  |
-| the website has a post system, that includes image, title, subtrenditt and date | yes |  |
-| the website allows for a like and comment system, which also allows to edit comment or remove like | yes |  |
-| the website includes interactive feed that only displays posts of the subtrenditts followed | yes |  |
-| the website shows artificial trends in the popular by analysing trends. | yes |  |
-|  |  |  |                                               
+| The website has a login and registration system with input validations and secure storage | Yes | The login and registration process was smooth and easy to navigate. I felt secure knowing that my information was being stored safely. Great job on this! |
+| The website only allows for users that are logged in to access the network (for longer than 10s) using JWT | Yes | The JWT implementation worked perfectly. I appreciate that only logged-in users can access the network, which adds an extra layer of security. |
+| The website has a post system, that includes image, title, subtrenditt and date | Yes | Posting is straightforward and intuitive. I like how you can add images, titles, and select subtrenditts. The date feature is a nice touch, too. |
+| The website allows for a like and comment system, which also allows to edit comment or remove like | Yes | The like and comment system is really engaging. I love that I can edit my comments and remove likes if needed. It makes interactions more flexible. |
+| The website includes interactive feed that only displays posts of the subtrenditts followed | Yes | The feed is awesome. It only shows posts from the subtrenditts I follow, making it super relevant and easy to stay updated. |
+| The website shows artificial trends in the popular by analysing trends. | Yes | The trends section is fascinating. It gives a great overview of what's popular by analyzing trends. This feature keeps the content fresh and interesting. |
 
-## Beta Testing 
 
-User
+### Reflection
 
+Overall beta testers seemed pretty satisfied with the functionality and the appeal of it, however they do believe that in order to reach larger public we still have to implement more feauturesñ
 
 ## Reccomendations : Looking forward
 
@@ -429,6 +442,21 @@ The thing that the Beta Tester's mentioned multiple times was that even though a
 ### 3. Analysis of Trends using GPU programming
 
 An important addition that could be added if Trenditt were expanded into a larger social network and would want to potentially become more personalized would be Analysing Trends by using Graphic Proccessing Unit programming. Imagine you are running a social media platform where you need to analyze engagement metrics from posts to determine trending topics. Each metric (likes, shares, comments) is assigned a score, and you need to process millions of these metrics quickly to update the trending topics in real-time. If there was to be further expansion and it would reach a certain level of data stored then this would most definitely be a good and viable implementation.
+
+# Appendix
+## Forms Collected 
+We collected 3 responses from a form in order to have a clearer picture of what the user wanted from their side and what they expected and whetehr they were even going to use it.
+
+<img src="https://github.com/marinamen/unit4_project/blob/main/images/Screenshot%202024-05-30%20at%2011.50.25.png" width=80% height=80%>
+<img src="https://github.com/marinamen/unit4_project/blob/main/images/Screenshot%202024-05-30%20at%2011.50.30.png" width=80% height=80%>
+<img src="https://github.com/marinamen/unit4_project/blob/main/images/Screenshot%202024-05-30%20at%2011.50.35.png" width=80% height=80%>
+<img src="https://github.com/marinamen/unit4_project/blob/main/images/Screenshot%202024-05-30%20at%2011.50.57.png" width=80% height=80%>
+<img src="https://github.com/marinamen/unit4_project/blob/main/images/Screenshot%202024-05-30%20at%2011.51.02.png" width=80% height=80%>
+<img src="https://github.com/marinamen/unit4_project/blob/main/images/Screenshot%202024-05-30%20at%2011.51.08.png" width=80% height=80%>
+<img src="https://github.com/marinamen/unit4_project/blob/main/images/Screenshot%202024-05-30%20at%2011.51.16.png" width=80% height=80%>
+<img src="https://github.com/marinamen/unit4_project/blob/main/images/Screenshot%202024-05-30%20at%2011.51.22.png" width=80% height=80%>
+
+
 
 # Works cited
 [^1]: Dream AI generated image (https://Project4pictureDreamAi.jpg)
