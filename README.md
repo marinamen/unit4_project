@@ -188,15 +188,34 @@ As shown in fig.8 the additional feature that the register function has, after m
 
 
 ```.py
-from flask_mail import Mail, Message
+@app.route('/send_email', methods=['POST', 'GET'])
+@token_required
+def send_email():
+    user_id = request.user_id  #retrieve user_id from the token
+    db = DatabaseWorker('unit4.db')
+    user = db.search("SELECT email FROM users WHERE id = ?", (user_id,), multiple=False)
+    if not user:
+        flash('User not found', 'danger')
+        return redirect(url_for('home2'))
 
-app.config['MAIL_SERVER'] = 'smtp.gmail.com'
-app.config['MAIL_PORT'] = 587 
-app.config['MAIL_USE_TLS'] = True
-app.config['MAIL_USERNAME'] = 'aestrivela@gmail.com'  #email
-app.config['MAIL_PASSWORD'] = 'CENSORED!'  #email password
-app.config['MAIL_DEFAULT_SENDER'] = 'aestrivela@gmail.com'  #email default sender
-mail=Mail(app)
+    sender_email = user[0]
+
+    if request.method == 'POST':
+        recipient_email = request.form['email']
+        subject = request.form['subject']
+        message = request.form['message']
+
+        #simulate sending email by printing the details to the terminal
+        print(f"Email from: {sender_email}")
+        print(f"Email to: {recipient_email}")
+        print(f"Subject: {subject}")
+        print(f"Message: {message}")
+
+        flash('Email sent successfully!', 'success')
+        return redirect(url_for('send_email'))
+
+    return render_template('send_email.html', sender_email=sender_email)
+
 ```
 
 
@@ -391,13 +410,25 @@ num_posts = 1000000
 | the website shows artificial trends in the popular by analysing trends. | yes |  |
 |  |  |  |                                               
 
+## Beta Testing 
+
+User
+
 
 ## Reccomendations : Looking forward
 
 
 ### 1. Chat with other users
 
-### 2. Further expansion of cities/subreddits
+Expanding my trenditt to include a chat feature would significantly increase attraction, allowing users to communicate in real-time will create a more active and interactive communitym encouraging them to spend more time on the platform. By providing a space for users to share ideas, ask questions, and offer support, the chat feature would add value to their experience and increase overall satisfaction. It is definitely being considered for the future, however downsides could include that it could lead to cyberbullying or trolling, this would not be optimal since our web app aims to be a safe and exciting place where you can share your thoughts on fashion so that would mean that we would have to weigh out the pro's vs cons or possibly implement censoring into the chats to prevent this. This said we are definitely considering this as a future option.
+
+### 2. Further expansion of cities/subtrenddits
+
+The thing that the Beta Tester's mentioned multiple times was that even though all the cities for the subreddits were according to their tastes, as of this moment, they still think more cities or a system to create subtrenditts would be extremely attractive and necessary if we wanted Trenditt to expand. People hwo are not from the cities mentioned, are limited by this or forced to choose which they prefer, this is not ideal. If there is no increase in the number of subtrenditts then there will be no increase in users which supposes a problem because we want to continue expanding. However it is said that the cities picked are where the majority of global population is located hence why we chose them. Still, this is definitely in the top of our future priorities if we were to expand or someone would take over.
+
+### 3. Analysis of Trends using GPU programming
+
+An important addition that could be added if Trenditt were expanded into a larger social network and would want to potentially become more personalized would be Analysing Trends by using Graphic Proccessing Unit programming. Imagine you are running a social media platform where you need to analyze engagement metrics from posts to determine trending topics. Each metric (likes, shares, comments) is assigned a score, and you need to process millions of these metrics quickly to update the trending topics in real-time. If there was to be further expansion and it would reach a certain level of data stored then this would most definitely be a good and viable implementation.
 
 # Works cited
 [^1]: Dream AI generated image (https://Project4pictureDreamAi.jpg)
