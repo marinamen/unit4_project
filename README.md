@@ -396,7 +396,11 @@ num_posts = 1000000
 
 
 
-# Criteria D: Functionality and Extensibility
+# Criteria D: Functionality and Extensibility 
+## video link
+
+https://drive.google.com/drive/u/0/folders/1u8XF1S-m0ZudBZugv-8VxZPUnOI8G1RP
+
 
 # Criteria E: Evaluation
                                              
