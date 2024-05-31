@@ -175,6 +175,30 @@ As shown in fig.8 the additional feature that the register function has, after m
 
 ## SUCCESS CRITERIA 2 : A posting system to EDIT/CREATE/DELETE comments.
 
+```.py
+@app.route('/delete_post/<int:post_id>', methods=['GET', 'POST'])
+@login_required
+def delete_post(post_id):
+    post_data = db_worker.search(f"SELECT * FROM posts WHERE id = {post_id}")
+    if not post_data:
+        flash('No post found with that id.', 'danger')
+        return redirect(url_for('home'))
+
+    if post_data[1] != current_user.id:
+        flash('You are not authorized to delete this post.', 'danger')
+        return redirect(url_for('home'))
+
+    if request.method == 'POST':
+        db_worker.run_query(f"DELETE FROM posts WHERE id = {post_id}")
+
+        flash('Your post has been deleted!', 'success')
+        return redirect(url_for('home'))
+
+    return render_template('delete_post.html', post=post_data)
+```
+
+
+
 
 
 ## SUCCESS CRITERIA 3 : A system to add/remove likes.
@@ -183,6 +207,9 @@ As shown in fig.8 the additional feature that the register function has, after m
 ## SUCCESS CRITERIA 4 : A system to follow/unfollow users, follow/unfollow topics or groups.
 ## SUCCESS CRITERIA 5 : A profile page with relevant information.
 ## SUCCESS CRITERIA 6 : [HLs] upload images.
+
+
+
 ## SUCCESS CRITERIA 7 : [HL++] send emails.
 
 
