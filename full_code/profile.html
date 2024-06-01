@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ user[1] }}'s Profile</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .nav-bar {
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 200px;
+            height: 100%;
+            background-image: url('/static/nav_bar.png');
+            background-size: cover;
+            background-repeat: no-repeat;
+        }
+
+        .tags-container {
+            position: fixed;
+            left: 10px;
+            top: 10%;
+        }
+        .home-button {
+            display: block;
+            width: 140px;
+            height: 25px;
+            background-color: transparent;
+            border: none;
+            cursor: pointer;
+            margin-bottom: 70px;
+        }
+        .tag-button {
+            display: block;
+            width: 140px;
+            height: 25px;
+            background-color: transparent;
+            border: none;
+            cursor: pointer;
+            margin-bottom: 15px;
+        }
+        .profile-container {
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 80%;
+            max-width: 600px;
+            text-align: center;
+        }
+        .profile-picture {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid #f9bfcd;
+        }
+        .upload-btn {
+            display: inline-block;
+            margin: 20px 0;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            background-color: #f9bfcd;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        .upload-btn:hover {
+            background-color: #f9bfcd;
+        }
+        h1 {
+            color: #333;
+        }
+        ul {
+            list-style: none;
+            padding: 0;
+        }
+        li {
+            background-color: #e7e7e7;
+            margin: 10px 0;
+            padding: 10px;
+            border-radius: 5px;
+        }
+        a {
+            text-decoration: none;
+            color: #f9bfcd;
+        }
+    </style>
+</head>
+<body>
+    <div class="nav-bar"></div>
+
+    <div class="tags-container">
+        <button class="home-button" onclick="window.location.href='/home2'"></button>
+        <button class="tag-button" onclick="window.location.href='/subtrenditt'"></button>
+        <button class="tag-button" onclick="window.location.href='/subtrenditt/tokyo'"></button>
+        <button class="tag-button" onclick="window.location.href='/subtrenditt/london'"></button>
+        <button class="tag-button" onclick="window.location.href='/subtrenditt/mumbai'"></button>
+    </div>
+    <div class="profile-container">
+        <h1>{{ user[1] }}'s Profile</h1>
+        <img src="/static/face.png" alt="Profile Picture" class="profile-picture">
+        <h2>Comments</h2>
+        <ul>
+            <li>!<a href="{{ url_for('view_post', post_id=1) }}">post</a></li>
+
+
+
+
+        </ul>
+        <h1>All<a href="/users">Users</a> </h1>
+
+    </div>
+</body>
+</html>
+
