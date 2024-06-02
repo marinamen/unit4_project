@@ -44,6 +44,20 @@ Create a Flask Web application for an online bulletin board system (like reddit)
 
 # Criteria C Development
 
+## Existing tools
+
+| Libraries      |
+|----------------|
+| Flask          |
+| SQLite3        |
+| JWT            |
+| werkzeug.utils |
+| datetime       |
+| os             |
+| sqlite 3       |
+| passlib.hash   |
+
+
 ## Techniques used
 
 1. Manipulating SQLite Database
@@ -89,10 +103,19 @@ App route, so into what adress from our website this page is saved under, in thi
 
 Within our login function:
 
-A connection with our Database function is established following the usual protocol shown below.
+A connection with our Database function is established following the usual protocol shown below. My previous `DatabaseWorker` had a significant downside, it's vulnerability to SQL injection attacks when  incorporating user input into the queries, in order to mitigate this risk and improve security, I altered the run_query method to accept a `params tuple`. 
+
 ```.py
-    db = DatabaseWorker('unit4.db')
+def run_query(self, query: str, params: tuple = ()):
+    self.cursor.execute(query, params)
+    self.connection.commit()
+
 ```
+*fig.2*
+
+1. `params: tuple = ()` This change introduces a params parameter, which is a tuple (finite sequence or ordered list of numbers) containing the values to be safely inserted into the SQL query.
+2.`self.cursor.execute(query, params)` By passing the params tuple to the execute method, I allow the database worker to handle the insertion of these parameters safely, this method replaces any placeholders in the query (typically represented by ? ) with the actual values in params, escaping them appropriately to prevent SQL injection.
+
 *fig.2*
 
 Following this we will now set what happens when a button is clicked within the website that needs information or verification from the database. In this case since it is a login we will use an if that is complied whenever a button that requires something to be verified with the database so it would be triggered when the `LOGIN` button is clicked after the user has inputted their information.
@@ -173,42 +196,164 @@ Lastly if the conditions required are not met it an error pops up.
 As shown in fig.8 the additional feature that the register function has, after multiple verifications of whether the inputted information by the user meets requirements such as email having `@` or password confimation, the information is inputted into he database via the method `POST` from the register button in the website, by the SQL query shown above. Although the amount of if loops here is quite inefficient I wanted to be able to have many requirements and so I decomposed it into smaller bits and the safest and least time demanding technique was to just put conditions using if and else techniques. I used the flash message in html which allows you to display messages on the top of the website to your program requirements, in this case when I was decomposing the algorithm I found that the best way to alert the user to change was via these.
 
 
-## SUCCESS CRITERIA 2 : A posting system to EDIT/CREATE/DELETE comments.
+##  Retrieving all Comments for Profile Page Display
 
 ```.py
-@app.route('/delete_post/<int:post_id>', methods=['GET', 'POST'])
-@login_required
-def delete_post(post_id):
-    post_data = db_worker.search(f"SELECT * FROM posts WHERE id = {post_id}")
-    if not post_data:
-        flash('No post found with that id.', 'danger')
-        return redirect(url_for('home'))
+  if request.method == 'POST':
+            title = request.form['title']
+            content = request.form['content']
+            now=datetime.now()
+            today = now.strftime("%d/%m/%Y")
+            if len(title) > 0 and len(content) > 0 and str(user_id) == current_user_id:  # check if the comment is being made by the logged in user
+                new_post = f"Insert into comment (title,content,user_id,publish_date) values('{title}','{content}','{user_id}','{today}')"
+                db.run_save(query = new_post)
+                return redirect(url_for('profile', user_id = user_id))
+        users, comment = None, None
+        user = db.search(f"SELECT * from users where id={user_id}")
+        if user:
+            posts = db.search(f"select * from posts where user_id={user_id}")
+            user = user[0]  # remember search returns a list (should be one user so...
 
-    if post_data[1] != current_user.id:
-        flash('You are not authorized to delete this post.', 'danger')
-        return redirect(url_for('home'))
+        return render_template("profile.html", user = user, posts = posts, current_user_id=int(current_user_id))
 
-    if request.method == 'POST':
-        db_worker.run_query(f"DELETE FROM posts WHERE id = {post_id}")
-
-        flash('Your post has been deleted!', 'success')
-        return redirect(url_for('home'))
-
-    return render_template('delete_post.html', post=post_data)
 ```
+*fig.9*
+
+I developed this  to handle the creation of a new comment and to link it with the user who posted iot . When the user clicks submit on the comment (POST request), the code retrieves the title and content of the post from the form data. It also gets the current date formatted as DD/MM/YYYY, before inserting the comment into the database, the code checks if the title and content are not empty and if the user ID from the form matches the currently logged-in user ID (current_user_id) using the JWT. This ensures that only the logged-in user can make the post, an extra layer of safety from the `@token_required` method. It these are met, a SQL query inserts the comments into the comments table, and db.run_save executes this query. After saving the post, the user is redirected to their profile page.
+
+For the `GET` request, the code fetches the user's data and their posts, and comments from the database, initially the variables of comments and id are set  to None. The user's data is fetched using their ID, and if the user exists, their comments are retrieved from the comments table. The user variable is then set to the first item in the list since the search query returns a list finally, the profile page is rendered with the user's data, their posts, and the current_user_id to manage display and interaction logic on the front end, ensuring secure post creation and dynamic profile rendering.
 
 
 
+
+
+
+
+*fig.8*
+
+##  Nested Loop to Display Dynamic Feed
+
+```.html
+<div class="feed">
+    {% for post in posts %}
+    <!-- loop through each post in the 'posts' list -->
+    <div class="post" id="post-{{ post.id }}">
+        <!-- set the id of the post dynamically based on the post id -->
+        <div class="post-header">
+            <!-- post header section -->
+            <img src="/static/{{ post.logo }}" alt="Logo" class="post-logo">
+            <!-- display the posts logo image -->
+            <span class="post-logo-text">t/ {{ post.subtrenditt }}</span>
+            <!-- display the subtrenditt name -->
+            <button class="join-button" onclick="toggleJoin(this)">Join</button>
+            <!-- join button with an onclick event handler -->
+        </div>
+        <img src="/static/{{ post.image }}" alt="Post Image" onclick="viewPost({{ post.id }})">
+        <!-- display the main post image with an onclick event handler to view the post -->
+        <div class="post-title">{{ post.title }}</div>
+        <!-- display the title of the post -->
+        <div class="post-description">{{ post.description }}</div>
+        <!-- display the description of the post -->
+        <div class="post-user" onclick="viewProfile('{{ post.user }}')">Posted by {{ post.user }}</div>
+        <!-- display the user who posted with an onclick event handler to view the profile -->
+        <div class="post-actions">
+            <button onclick="likePost({{ post.id }})">Like</button>
+            <!-- like button with an onclick event handler to like the post -->
+        </div>
+    </div>
+    {% endfor %}
+    <!-- dnd of the for loop -->
+</div>
+
+
+```
+*fig.10*
+
+To create a dynamic post feed, I employed the principles of Decomposition and Abstraction. By decomposing the problem, I identified the need of a data source, pass this data to the HTML template, and generate HTML dynamically. The defined database is a SQLlite one in the table `posts`, where each post containins attributes like id, subtrenditt, logo, image, title, description, and user_id. We then passed this list of posts to the template using Flask's render_template function, in the template, I used `Jinja2` to and nested for loops to iterate through the list and dynamically generate the HTML structure for each post, thereby avoiding repetitive code and making the system scalable. This  assures that the content is easily maintainable and allows for simple updates by modifying the database using queries without altering the HTML structure, which allows for any developer to further develop it without much complication. This also follows the `KISS` programming paradigm, since it allows for the whole posting algorithm to be simple and not repetitive. 
+
+During the development of this I encountered a significant amount of misformatted retrievals of data that then displayed the posts incorrectly, how I solved it was by implementing debugging techniques such as printing the information after being retrieved, this showed me that the problems were formed with my HTML formatting of the information, and after researching and trying different solutions, I realised that indexing brought me troubles so instead i used the `.example` technique that allowed no room for misformatting erros.
 
 
 ## SUCCESS CRITERIA 3 : A system to add/remove likes.
+```.py
+@app.route('/like_post/<int:post_id>', methods=['POST'])
+@token_required  # ensure that the user is authenticated
+def like_post(post_id):
+    user_id = request.user_id  # retrieve the user_id from the request (set by the token_required decorator)
+    if not user_id:
+        # If the user is not authenticated, return an error response
+        print("user not authenticated")
+        return jsonify({'success': False, 'message': 'User not authenticated'}), 401
+
+    db = DatabaseWorker('unit4.db')  # create an instance of DatabaseWorker to interact with the database
+
+    # check if the user has already liked the post
+    liked = db.search("SELECT * FROM post_likes WHERE post_id = ? AND user_id = ?", (post_id, user_id), multiple=False)
+    print(liked)
+    if liked:
+        # if the user has already liked the post, remove the like
+        db.run_query("DELETE FROM post_likes WHERE post_id = ? AND user_id = ?", (post_id, user_id))
+        db.run_query("UPDATE posts SET likes = likes - 1 WHERE id = ?", (post_id,))
+    else:
+        # if the user has not liked the post yet, add the like
+        db.run_query("INSERT INTO post_likes (post_id, user_id) VALUES (?, ?)", (post_id, user_id))
+        db.run_query("UPDATE posts SET likes = likes + 1 WHERE id = ?", (post_id,))
+
+    # get the updated number of likes for the post
+    post = db.search("SELECT likes FROM posts WHERE id = ?", (post_id,), multiple=False)
+    if post:
+        likes = post[0]  # extract the number of likes from the query result
+        return jsonify({'success': True, 'likes': likes})  # return the updated like count as a JSON response
+    return jsonify({'success': False})  # if the post is not found, return a failure response
 
 
-## SUCCESS CRITERIA 4 : A system to follow/unfollow users, follow/unfollow topics or groups.
-## SUCCESS CRITERIA 5 : A profile page with relevant information.
+
+```
+*fig.11*
+
+In order to create a system that allows the user to like and unlike I used the computational thinking Algorithm Design to handle post likes effectively. I started by defining the route /like_post/<int:post_id> to manage POST requests, ensuring that only authenticated users could interact with it through the `@token_required` decorator. This decorator extracts the user_id from the JWT token and attaches it to the request, hence if the user is not authenticated, a JSON response indicates the failure and doesnt allow the unauthorised user to continue. Next step is,the function checks if the user has already liked the post, if it returns true , it removes the like and decrements the like count. Otherwise, it adds a new like and increments the count this ensures a correct use and not abuse of the existing like count. Finally, the updated like count is fetched and returned as a JSON response, this design ensures security, as the `@token_required` decorator only allows authenticated users. The self-duplicating like/unlike mechanism checks the current state and updates accordingly, preventing data corruption, parameterized queries in db.run_query and db.search methods safeguard against SQL injection. The code is also commented in order to enhance extensibility.
+
+
+
+
+
+
 ## SUCCESS CRITERIA 6 : [HLs] upload images.
 
+Another success criteria was being able to upload images, and for this to function there needs to be a base assumption that the user has the files they want to upload already in their files. This is an issue in terms of scalability since in the future a way to expand it into uploading images from a remote cloud database such as Google Photos instead of Local Database such as finder.
 
+```.py
+
+def create_post():
+    if request.method == 'POST':
+        subtrenditt = request.form['subtrenditt']
+        image = request.files['image']
+        title = request.form['title']
+        comment = request.form['comment']
+        user_id = request.cookies.get('user_id')
+
+        if image and user_id:
+            filename = secure_filename(image.filename)
+            image_path = os.path.join('static/uploads', filename)
+            image.save(image_path)
+
+            db = DatabaseWorker('unit4.db')
+            db.run_query(
+                "INSERT INTO posts (title, comment, image_url, date, subtrenditt, likes, user_id) VALUES (?, ?, ?, ?, ?, ?, ?)",(title, comment, image_path, datetime.now().strftime('%Y-%m-%d %H:%M:%S'), subtrenditt, 0, user_id))
+            flash('Post created successfully!', 'success')
+            return redirect(url_for('home2'))
+
+    return render_template('create_post.html')
+
+
+
+```
+
+
+*fig.12*
+
+
+As shown in fig.12 to develop the `create_post` function, I used the computational thinking technique of **Algorithmic Thinking** to effectively manage post creation, including a secure upload of photos. The function starts by extracting standard form data, such as `subtrenditt`, `image`, `title`, and `comment`, and retrieves the `user_id` from cookies to ensure the user is authenticated. For image uploads, the image filename is cleaned up by using `secure_filename` to prevent any malicious file names and is saved in the `static/uploads` directory created only for user uploads, this has limitations since it is still quite not secure which can lead to privacy leaks but it is a further reccomendation . A `DatabaseWorker` instance then runs a parameterized query to insert the new post into the `posts` table, which includes the image path, current date, subtrenditt, initial like count (set to 0), and user ID so that the social network is able to have enough information for all types of data handling later on. If the post is successfully created, a success message is flashed to the user, and they are redirected to the home page. An obstacle I encountered was ensuring the secure handling and storage of uploaded files, I solved this by using `secure_filename` and organizing uploads into a dedicated directory, this approach allows to securely manages user inputs and file uploads.
 
 ## SUCCESS CRITERIA 7 : [HL++] send emails.
 
@@ -244,35 +389,16 @@ def send_email():
     return render_template('send_email.html', sender_email=sender_email)
 
 ```
+*fig.13*
+
+The Send_email function shown in Fig.13 is a email sending replication system, I utilized the Object-Oriented Programming (OOP) principles to securely handle user authentication and database interactions. It then queries the database for the user's email, if the user is not found, an error message is flashed, and the user is redirected to the home page which mantains a safe and preventive algorithm . Upon a POST request, the function retrieves the recipient's email, subject, and message from the form data, for simplicity and safety in a development environment, the function simulates sending the email by printing the details to the terminal instead of actually sending it since I do not have a valid email port that I can use to send actual emails. After simulating the email send, a success message is flashed, and the user is redirected back to the homel my approach demonstrates OOP principles such as encapsulation, by encapsulating database operations within the DatabaseWorker class, and abstraction, by simplifying complex database interactions,h owever, a notable limitation is that as i mentioned previously it only simulates email sending, which is unsuitable for a production environment, this can be resolved by integrating a real email service, thus ensuring the function is ready for actual email dispatch if extended
 
 
 
 
 
-```.py
 
-@app.route('/sendEmail', methods=['GET', 'POST'])
-def sendEmail():
-    if request.method == 'POST':
-        email = request.form['email']
-        subject = request.form['subject']
-        message_body = request.form['message']
 
-        #create a message object
-        msg = Message(subject, recipients=[email])
-        msg.body = message_body
-
-        try:
-    
-            mail.send(msg)
-            flash('email sent successfully!', 'success')
-        except Exception as e:
-            flash(f'failed to send email: {e}', 'error')
-
-        return redirect(url_for('sendEmail'))
-
-    return render_template('sendEmail.html')
-```
 
 
 
@@ -292,9 +418,9 @@ def users():
     return render_template('users.html')
 
 ```
-*fig.?*
+*fig.14*
 
-Fig.? hows the function used to showcase the list of all trenditt users, it uses an algorithm that checks if the user has a valid cookie and then it shows the list of users extracted from the user database, although not shown here, for obvious reasons in the html code showing information such as the hashed password is omitted and only the relevant user information is displayed. So the table is formatted with username, email, city, followers, posts. 
+Fig.14 hows the function used to showcase the list of all trenditt users, it uses an algorithm that checks if the user has a valid cookie and then it shows the list of users extracted from the user database, although not shown here, for obvious reasons in the html code showing information such as the hashed password is omitted and only the relevant user information is displayed. So the table is formatted with username, email, city, followers, posts. 
 
 A cool feauture I added in the home page is that along the main post feed, there is two boxes, displaying the usernames of all of the users that are currently part of the trenditt social network. Using my skills for UI, which its goal is to make the user's experience easy and intuitive, requiring minimum effort on the user's part to receive the maximum desired outcome[^9] I though about this feature, that for a growing network its a good incentive to want to interact with users in a very easy and intuitive way that doesnt require much further thought.
 
