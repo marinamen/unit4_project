@@ -28,7 +28,7 @@
 
 Create a Flask Web application for an online bulletin board system (like reddit). You are free to set the general theme, groups, visuals (CSS), topics, etc, but you need:
 
-**1. A login/registration system.**
+**1.A login/registration system.**
 
 **2. A posting system to EDIT/CREATE/DELETE comments.**
 
